@@ -155,62 +155,6 @@ class VirtualEnigmaDev:
                 cod.append(i)
         return ''.join(cod)
 
-    #
-    # def en(txt, stg, wheels):
-    #     txt = txt.upper()
-    #     asnum = []
-    #     cod = []
-    #     for i in range(len(txt)):
-    #         if txt[i] in list(string.ascii_uppercase):
-    #             x = list(string.ascii_uppercase).index(txt[i])
-    #             asnum.append(x)
-    #         else:
-    #             asnum.append(txt[i])
-    #     for i in asnum:
-    #         if i in range(0, 26):
-    #             for spin in range(len(wheels)):
-    #                 i += stg[spin]
-    #                 i = wheels[spin][i % 26]
-    #             cod.append(string.ascii_uppercase[i])
-    #
-    #             stg = translate(stg) + 1
-    #             stg = untranslate(stg)
-    #         else:
-    #             cod.append(i)
-    #     return ''.join(cod)
-    #
-
-    # def de(code, stg, whl):
-    #     code = code.upper()
-    #     whl = rev_wls(whl)
-    #     asnum = []
-    #     plain = []
-    #     for i in range(len(code)):
-    #         if code[i] in list(string.ascii_uppercase):
-    #             x = list(string.ascii_uppercase).index(code[i])
-    #             asnum.append(x)
-    #         else:
-    #             asnum.append(code[i])
-    #     for i in asnum:
-    #         if i in range(0, 26):
-    #             for w in range(len(whl) - 1, -1, -1):
-    #                 i = whl[w][i]
-    #                 i -= stg[w]
-    #                 i = i % 26
-    #
-    #             plain.append(i)
-    #             stg = translate(stg) + 1
-    #             stg = untranslate(stg)
-    #         else:
-    #             plain.append(i)
-    #     for i in range(len(plain)):
-    #         if plain[i] in range(26):
-    #             plain[i] = string.ascii_uppercase[plain[i]]
-    #     outp = ""
-    #     for p in plain:
-    #         outp += p
-    #     return outp
-
 
     def reverse_whls(self, wheel):
         wa = [''] * 26
