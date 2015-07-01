@@ -4,7 +4,7 @@ from random import randrange
 from time import sleep as zzz
 
 
-class VirtualEnigmaDev:
+class EnigmaDevice:
     def __init__(self):
         self.wheels = [{0: 13, 1: 25, 2: 5, 3: 9, 4: 14, 5: 6, 6: 21, 7: 11, 8: 8, 9: 24, 10: 22, 11: 15, 12: 3, 13: 10,
                         14: 20, 15: 16, 16: 18, 17: 12, 18: 7, 19: 1, 20: 19, 21: 4, 22: 2, 23: 23, 24: 17, 25: 0},
@@ -18,21 +18,27 @@ class VirtualEnigmaDev:
                        {0: 21, 1: 22, 2: 23, 3: 24, 4: 25, 5: 0, 6: 1, 7: 2, 8: 3, 9: 4, 10: 5, 11: 6, 12: 7, 13: 8,
                         14: 9, 15: 10, 16: 11, 17: 12, 18: 13, 19: 14, 20: 15, 21: 16, 22: 17, 23: 18, 24: 19, 25: 20}]
 
-        print("\n\n\n\tMini_Enigma \n\n\tby Nathan Smith\n\tgithub.com/NSMobileCS\n\tnarsmith012@gmail.com\n")
-        for i in range(5):
-            print('   -- -', end=' ')
-            zzz(.7)
+        txt = ["\n\n\n", "*-"*12+'\n'+" Mini_enigma\n\n by Nathan R Smith\n github.com/NSMobileCS\n narsmith012@gmail.com\n"+'-*'*12,
+               '\n\n', "This script simulates one version of the historical Enigma",
+               "encryption device that Alan Turing helped break during WWII.",
+               "It encodes & decodes text using 4 virtual code-wheels.\n",
+               "For historical accuracy, text displays in all caps.",
+               '\nVerbose mode allows you to \'see it working\' by ',
+               "printing program state every cycle",
+              "(0)verbose mode off (1)normal verbose mode (2)ultra verbose mode"]
 
-        print("\n\nThis script simulates one version of the historical Enigma",
-              "\nencryption device used in WWII. It encodes & decodes text using",
-              "\n4 virtual code-wheels.\n")
-        zzz(1)
-        print("For historical accuracy, text displays in all caps.")
-        zzz(.1)
-        self.verbose = True
-        seeitworking = input("Verbose mode allows you to \'see it working\' by printing program state every cycle. Leave verbose mode on? Enter y/n: ")
-        if seeitworking.lower() == 'n':
-            self.verbose = False
+        self.verbose = 1
+
+        for line in txt:
+            print(line)
+            zzz(1.1)
+        seeitworking = input("Selection (press Enter for default): ")
+        if seeitworking == '1':
+            pass
+        elif seeitworking == '2':
+            self.verbose = 2
+        else:
+            self.verbose = 0
 
     def untranslate(self, n):
         """changes between single position number / 4 position vals """
@@ -41,7 +47,7 @@ class VirtualEnigmaDev:
         c = (n // 26 ** 2) % 26
         b = (n // 26) % 26
         a = n % 26
-        if self.verbose:
+        if self.verbose > 1:
             print(a, b, c, d)
         return (a, b, c, d)
 
@@ -106,7 +112,7 @@ class VirtualEnigmaDev:
                     i = whl[w][i]
                     i -= stg[w]
                     i = i % 26
-                    if self.verbose:
+                    if self.verbose > 1:
                         print("w ", w, whl[w])
                         print(" - - - - ")
                         print("i ", i)
@@ -114,7 +120,7 @@ class VirtualEnigmaDev:
                 stg = self.translate(stg) + 1
                 stg = self.untranslate(stg)
                 if self.verbose:
-                    print("setting now = ", stg)
+                    print("Wheels\' position on last character decoded = ", stg)
             else:
                 plain.append(i)
         if self.verbose:
@@ -137,7 +143,7 @@ class VirtualEnigmaDev:
                 asnum.append(x)
             else:
                 asnum.append(txt[i])
-        if self.verbose:
+        if self.verbose > 1:
             print('as numbers where pos: ', asnum)
             print(" ... ")
         for i in asnum:
@@ -146,17 +152,17 @@ class VirtualEnigmaDev:
                     print('setting at ', stg, 'i comes in as', i)
                 for spin in range(len(self.wheels)):
                     i += stg[spin]
-                    if self.verbose:
+                    if self.verbose > 1:
                         print(i)
                     i = self.wheels[spin][i % 26]
-                    if self.verbose:
+                    if self.verbose > 1:
                         print(spin, self.wheels[spin], 'i = ', i)
                 cod.append(string.ascii_uppercase[i])
 
                 stg = self.translate(stg) + 1
                 stg = self.untranslate(stg)
                 if self.verbose:
-                    print("setting now: ", stg)
+                    print("Wheels\' position on last character encoded = ", stg)
             else:
                 cod.append(i)
         return ''.join(cod)
@@ -193,9 +199,13 @@ class VirtualEnigmaDev:
                 stg.append(randrange(26))
             print(stg)
         else:
-            for i in range(4):
-                ip = input("Enter pos setting #%s of 4: " % str(i + 1))
-                stg.append(int(ip))
+            try:
+                for i in range(4):
+                    ip = input("Enter pos setting #%s of 4: " % str(i + 1))
+                    stg.append(int(ip))
+            except ValueError:
+                print('there was a typo (ValueError). please try again')
+                return self.uiLoop()
         print("Setting is: %s " % str(stg))
         plain = input("Enter text to encode: ")
         code = self.en(plain, stg)
@@ -207,9 +217,13 @@ class VirtualEnigmaDev:
 
     def uiDecode(self):
         stg = []
-        for i in range(4):
-            ip = input("Enter pos setting #%s of 4: " % str(i + 1))
-            stg.append(int(ip))
+        try:
+            for i in range(4):
+                ip = input("Enter pos setting #%s of 4: " % str(i + 1))
+                stg.append(int(ip))
+        except ValueError:
+            print('there was a typo (ValueError). please try again')
+            return self.uiLoop()
         code = input("Enter text to decode: ")
         plain = self.de(code, stg)
         print("Result: ", plain)
@@ -236,7 +250,7 @@ class VirtualEnigmaDev:
             print("Operation failed. Exception: %s" % xception)
 
     def uiLoop(self):
-        print("\n\nMain Menu \t\t\t mini_enigma\n")
+        print('\n'*2 + '|'*29, "\n|| Mini_enigma | Main Menu ||\n" + '|'*29, '\n')
         wls = self.wheels
         haswheel = " *ATTN: Missing codewheels. Please select this option (#3) to generate * "
         try:
@@ -270,5 +284,5 @@ class VirtualEnigmaDev:
 
 
 if __name__ == '__main__':
-    enigma = VirtualEnigmaDev()
+    enigma = EnigmaDevice()
     enigma.uiLoop()
